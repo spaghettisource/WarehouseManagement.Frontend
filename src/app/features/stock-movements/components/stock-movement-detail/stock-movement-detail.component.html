@@ -1,0 +1,11 @@
+<div *ngIf="loading">Loading stock movement details...</div>
+<div *ngIf="error">{{ error }}</div>
+<div *ngIf="!loading && !error && stockMovement">
+  <h2>Stock Movement Details</h2>
+  <p>Movement ID: {{ stockMovement.movementID }}</p>
+  <p>Warehouse ID: {{ stockMovement.warehouseID }}</p>
+  <p>Product ID: {{ stockMovement.productID }}</p>
+  <p>Amount: {{ stockMovement.amount }}</p>
+  <p>Date: {{ stockMovement.date | date }}</p>
+  <p>Type: {{ stockMovement.isImport ? 'Import' : 'Export' }}</p>
+</div>

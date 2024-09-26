@@ -1,0 +1,9 @@
+<div *ngIf="loading">Loading warehouses...</div>
+<div *ngIf="error">{{ error }}</div>
+<ul *ngIf="!loading && !error">
+  <li *ngFor="let warehouse of warehouses">
+    <a [routerLink]="['/warehouses', warehouse.warehouseID]">
+      {{ warehouse.warehouseName }}
+    </a>
+  </li>
+</ul>

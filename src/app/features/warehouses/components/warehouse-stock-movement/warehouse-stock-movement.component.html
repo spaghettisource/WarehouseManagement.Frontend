@@ -1,0 +1,110 @@
+<div class="container">
+    <h2>Warehouse Stock Movements</h2>
+  
+    <!-- Warehouse Selection -->
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Select Warehouse</mat-label>
+      <mat-select [(value)]="selectedWarehouse" (selectionChange)="selectWarehouse($event.value)">
+        <mat-option *ngFor="let warehouse of warehouses" [value]="warehouse">
+          {{ warehouse.warehouseName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  
+    <!-- Stock Movement Form -->
+    <form [formGroup]="movementForm" (ngSubmit)="onSubmit()">
+      <h3>Add Stock Movement</h3>
+  
+      <!-- Product Selection -->
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Select Product</mat-label>
+        <mat-select formControlName="productID">
+          <mat-option *ngFor="let product of products" [value]="product.productID">
+            {{ product.productName }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="movementForm.controls['productID'].invalid && movementForm.controls['productID'].touched">
+          Product is required.
+        </mat-error>
+      </mat-form-field>
+  
+      <!-- Amount -->
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Amount</mat-label>
+        <input matInput type="number" formControlName="amount" min="1">
+        <mat-error *ngIf="movementForm.controls['amount'].invalid && movementForm.controls['amount'].touched">
+          Enter a valid amount greater than 0.
+        </mat-error>
+      </mat-form-field>
+  
+      <!-- Date -->
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="date">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="movementForm.controls['date'].invalid && movementForm.controls['date'].touched">
+          Date is required.
+        </mat-error>
+      </mat-form-field>
+  
+      <!-- Import/Export Toggle -->
+      <mat-slide-toggle formControlName="isImport" color="primary">
+        {{ movementForm.value.isImport ? 'Import' : 'Export' }}
+      </mat-slide-toggle>
+  
+      <!-- Submit Button -->
+      <button mat-raised-button color="primary" type="submit" [disabled]="movementForm.invalid || isLoading">
+        Add Stock Movement
+      </button>
+    </form>
+  
+    <!-- Current Stock Info -->
+    <div class="stock-info">
+      <p><strong>Current Stock Amount:</strong> {{ currentStockAmount }}</p>
+      <p><strong>Free Stock Space:</strong> {{ freeStockSpace }}</p>
+    </div>
+  
+    <!-- Stock Movements Table -->
+    <h3>Stock Movements</h3>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+  
+      <!-- Movement ID Column -->
+      <ng-container matColumnDef="movementID">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Movement ID</th>
+        <td mat-cell *matCellDef="let movement">{{ movement.movementID }}</td>
+      </ng-container>
+  
+      <!-- Product Name Column -->
+      <ng-container matColumnDef="productName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Product</th>
+        <td mat-cell *matCellDef="let movement">{{ getProductName(movement.productID) }}</td>
+      </ng-container>
+  
+      <!-- Amount Column -->
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+        <td mat-cell *matCellDef="let movement">{{ movement.amount }}</td>
+      </ng-container>
+  
+      <!-- Date Column -->
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+        <td mat-cell *matCellDef="let movement">{{ movement.date | date }}</td>
+      </ng-container>
+  
+      <!-- Type Column (Import/Export) -->
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+        <td mat-cell *matCellDef="let movement">{{ movement.isImport ? 'Import' : 'Export' }}</td>
+      </ng-container>
+  
+      <!-- Header and Row Definitions -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  
+    <!-- Paginator and Sort -->
+    <mat-paginator [pageSize]="10" showFirstLastButtons></mat-paginator>
+  </div>
+  

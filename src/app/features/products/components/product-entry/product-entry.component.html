@@ -1,0 +1,104 @@
+<!-- src/app/features/products/components/product-entry/product-entry.component.html -->
+
+<h2 mat-dialog-title>Add New Product</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <!-- Product Name -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Product Name</mat-label>
+      <input matInput formControlName="productName" placeholder="Enter product name">
+      <mat-error *ngIf="productForm.get('productName')?.hasError('required')">
+        Product Name is required.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Size Per Unit -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Size Per Unit</mat-label>
+      <input matInput type="number" formControlName="sizePerUnit" placeholder="Enter size per unit" step="0.1">
+      <mat-error *ngIf="productForm.get('sizePerUnit')?.hasError('required')">
+        Size Per Unit is required.
+      </mat-error>
+      <mat-error *ngIf="productForm.get('sizePerUnit')?.hasError('min')">
+        Size Per Unit must be at least 0.1.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Is Hazardous -->
+    <mat-checkbox formControlName="isHazardous">Hazardous</mat-checkbox>
+
+    <!-- Stock Movements -->
+    <div formArrayName="stockMovements">
+      <div *ngFor="let movement of stockMovements.controls; let i = index" [formGroupName]="i">
+        <!-- Movement ID -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Movement ID</mat-label>
+          <input matInput formControlName="movementID" type="number">
+        </mat-form-field>
+
+        <!-- Warehouse ID -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Warehouse ID</mat-label>
+          <input matInput formControlName="warehouseID" type="number">
+        </mat-form-field>
+
+        <!-- Product ID -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Product ID</mat-label>
+          <input matInput formControlName="productID" type="number">
+        </mat-form-field>
+
+        <!-- Amount -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Amount</mat-label>
+          <input matInput formControlName="amount" type="number">
+        </mat-form-field>
+
+        <!-- Date -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Date</mat-label>
+          <input matInput formControlName="date" type="date">
+        </mat-form-field>
+
+        <!-- Is Import -->
+        <mat-checkbox formControlName="isImport">Import</mat-checkbox>
+
+        <!-- Warehouse Details -->
+        <div formGroupName="warehouse">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Warehouse Name</mat-label>
+            <input matInput formControlName="warehouseName" placeholder="Enter warehouse name">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Max Stock Amount</mat-label>
+            <input matInput formControlName="maxStockAmount" type="number">
+          </mat-form-field>
+
+          <mat-checkbox formControlName="isHazardousOnly">Hazardous Only</mat-checkbox>
+        </div>
+
+        <!-- Product Details within Stock Movement -->
+        <div formGroupName="product">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Product Name</mat-label>
+            <input matInput formControlName="productName" placeholder="Enter product name">
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add More Stock Movements Button -->
+    <button mat-button type="button" (click)="addStockMovement()">
+      Add Stock Movement
+    </button>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" [disabled]="productForm.invalid" (click)="onSubmit()">
+    Add Product
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,10 @@
+<div *ngIf="loading">Loading warehouse details...</div>
+<div *ngIf="error">{{ error }}</div>
+<div *ngIf="!loading && !error && warehouse">
+  <h2>{{ warehouse.warehouseName }}</h2>
+  <p>Max stock amount: {{ warehouse.maxStockAmount }}</p>
+  <p>
+    Stores hazardous products only:
+    {{ warehouse.isHazardousOnly ? 'Yes' : 'No' }}
+  </p>
+</div>

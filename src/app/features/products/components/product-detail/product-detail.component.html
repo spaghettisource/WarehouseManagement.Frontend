@@ -1,0 +1,7 @@
+<div *ngIf="loading">Loading product details...</div>
+<div *ngIf="error">{{ error }}</div>
+<div *ngIf="!loading && !error && product">
+  <h2>{{ product.productName }}</h2>
+  <p>Size per unit: {{ product.sizePerUnit }}</p>
+  <p>Is hazardous: {{ product.isHazardous ? 'Yes' : 'No' }}</p>
+</div>
